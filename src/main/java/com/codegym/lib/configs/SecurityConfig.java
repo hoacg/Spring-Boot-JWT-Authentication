@@ -30,6 +30,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new JwtTokenUtil();
     }
 
+
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        // configure AuthenticationManager so that it knows from where to load
+        // user for matching credentials
+        // Use BCryptPasswordEncoder
+        auth.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoder());
+    }
+
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoder());
@@ -42,7 +52,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
 
                 // don't authenticate this particular request
-                .authorizeRequests().antMatchers("/authentication").permitAll()
+                .authorizeRequests().antMatchers("/authentication", "/signin").permitAll()
+                .and()
+                .authorizeRequests().antMatchers("/register").permitAll()
 
                 // all other requests need to be authenticated
                 .anyRequest().authenticated();
