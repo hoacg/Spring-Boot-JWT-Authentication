@@ -32,18 +32,6 @@ public class JwtAuthenticationController {
     @Autowired
     private JwtUserDetailsService userDetailsService;
 
-    @PostMapping("/signin")
-    public ResponseEntity<JwtResponse> signIn(@RequestBody JwtRequest request) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        String jwt = jwtTokenUtil.generateToken(userDetails);
-        return ResponseEntity.ok(new JwtResponse(jwt));
-    }
-
     @PostMapping("/authentication")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest request) throws Exception {
         authenticate(request.getUsername(), request.getPassword());
