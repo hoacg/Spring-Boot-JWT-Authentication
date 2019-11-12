@@ -17,10 +17,6 @@ public class Role implements GrantedAuthority {
     private Long id;
     private String role;
 
-    @JsonIgnore
-    @ManyToMany( cascade = CascadeType.ALL , fetch = FetchType.EAGER, mappedBy = "roles")
-    private Set<User> users = new HashSet<>();
-
     @Override
     public String getAuthority() {
         return this.role;

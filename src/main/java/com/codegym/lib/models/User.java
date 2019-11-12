@@ -7,7 +7,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {
+                "username"
+        })
+})
 @Data
 public class User {
     @Id
@@ -16,10 +20,10 @@ public class User {
     private String username;
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "users_roles",
-            joinColumns = { @JoinColumn(name = "users_id") },
-            inverseJoinColumns = { @JoinColumn(name = "roles_id") }
+            joinColumns = { @JoinColumn(name = "user_id") },
+            inverseJoinColumns = { @JoinColumn(name = "role_id") }
     )
     private Set<Role> roles = new HashSet<>();
 
